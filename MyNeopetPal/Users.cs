@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Threading;
@@ -28,9 +29,9 @@ namespace MyNeopetPal
             this.connect = connect;
             this.txtbox = txtbox;
         }
-
+        Random rnd = new Random();
         public List<int> actionQueue = new List<int>();
-
+        System.Threading.Timer timer;
         public ModManager getModManager()
         {
             return modManager;
@@ -43,17 +44,17 @@ namespace MyNeopetPal
                 //i need to also add a bool to say if currently logged in
                 Thread.CurrentThread.IsBackground = true;
                 System.Threading.TimerCallback cb = new System.Threading.TimerCallback(OnTimedEvent);
-                timer = new System.Threading.Timer(cb, null, 1000 * 60 * 1, 0); //tme will be slightly randomised so all users are split up a bit
+                timer = new System.Threading.Timer(cb, null, 1000 * 60 * rnd.Next(1, 12), 0); //tme will be slightly randomised so all users are split up a bit
             }).Start();
         }
-        System.Threading.Timer timer;
+        
         void OnTimedEvent(object obj)
         {
             if (SqliteData.UpdateSnowball(connect, this, modManager.form))
             {
                 modManager.form.AppendText("Buying stick snowball", username, txtbox);
                 getModManager().buyStickySnowball(this);
-                timer.Change(1000 * 60 * 1, 0);  //reset timer
+                timer.Change(1000 * 60 * rnd.Next(1, 12), 0);  //reset timer
                 return;
             }
             else
@@ -63,7 +64,7 @@ namespace MyNeopetPal
             {
                 modManager.form.AppendText("Starting trudy", username, txtbox);
                 getModManager().startTrudy(this);
-                timer.Change(1000 * 60 * 1, 0);  //reset timer
+                timer.Change(1000 * 60 * rnd.Next(1, 12), 0);  //reset timer
                 return;
             }
             else
@@ -73,7 +74,8 @@ namespace MyNeopetPal
 
 
             //Nothing ready to do so just wait a bit longer and go again.
-            timer.Change(1000 * 60 * 1, 0);  //reset timer
+
+            timer.Change(1000 * 60 * rnd.Next(1, 12), 0);  //reset timer
         }
     }
 }
