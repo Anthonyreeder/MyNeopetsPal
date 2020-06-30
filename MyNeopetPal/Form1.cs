@@ -19,31 +19,54 @@ namespace MyNeopetPal
     {
         List<Users> allUsers = new List<Users>();
         SQLiteConnection connect;
+        public List<RichTextBox> logBoxes = new List<RichTextBox>();
 
-        public void AppendText(string what, string user)
+        public void AppendText(string what, string user, RichTextBox txtbox = null)
         {
             if (this.InvokeRequired)
             {
                 this.Invoke(
                     new MethodInvoker(
-                    delegate () { AppendText(what, user); }));
+                    delegate () { AppendText(what, user, txtbox); }));
             }
             else
             {
                 DateTime timestamp = DateTime.Now;
-                logbox.AppendText(timestamp.ToShortTimeString() + " : " + user + " : " + what + Environment.NewLine);
-                logbox.ScrollToCaret();
+                if (txtbox == null)
+                {
+                    
+                    logboxSystem.AppendText(timestamp.ToShortTimeString() + " : " + user + " : " + what + Environment.NewLine);
+                    logboxSystem.ScrollToCaret();
+                }
+                else
+                {
+                    txtbox.AppendText(timestamp.ToShortTimeString() + ":" + what + Environment.NewLine);
+                    txtbox.ScrollToCaret();
+                }
             }
         }
+       
         public void setPage(string page)
         {
             //wbview.DocumentText = page;
             //wbview.AllowNavigation = false;
         }
+        
         public Form1()
         {
             InitializeComponent();
             connect = SqliteData.CreateConnection();
+            logBoxes.Add(logbox);
+            logBoxes.Add(logbox1);
+            logBoxes.Add(logbox2);
+            logBoxes.Add(logbox3);
+            logBoxes.Add(logbox4);
+            logBoxes.Add(logbox5);
+            logBoxes.Add(logbox6);
+            logBoxes.Add(logbox7);
+            logBoxes.Add(logbox8);
+            logBoxes.Add(logbox9);
+            logBoxes.Add(logboxSystem);
             loadusers();
         }
         System.Threading.Timer timer;
@@ -63,11 +86,9 @@ namespace MyNeopetPal
 
         private void loadusers()
         {
-            allUsers = SqliteData.ReadData(connect, this);
+            allUsers = SqliteData.ReadData(connect, this, logBoxes);
         }
         
-
-
         private void startBot()
         {
             new Thread(() =>
@@ -83,55 +104,11 @@ namespace MyNeopetPal
             }).Start();
         }
 
-
         private void btn_login_Click(object sender, EventArgs e)
         {
-
             startBot();
             //have a form control to select which user
             //using their ID/Name/Username whatever... find the correct one in list (for testing ill just use 0 as theres only 1 user)            
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //have a form control to select which user
-            //using their ID/Name/Username whatever... find the correct one in list (for testing ill just use 0 as theres only 1 user)
-            foreach (var user in allUsers)
-            {
-                user.getModManager().buyStickySnowball(user);
-            }
-
-            new Thread(() =>
-            {
-                Thread.CurrentThread.IsBackground = true;
-                /* run your code here */
-                foreach (var user in allUsers)
-                {
-                    user.getModManager().buyStickySnowball(user);
-                }
-                System.Threading.TimerCallback cb = new System.Threading.TimerCallback(OnTimedEvent);
-                timer = new System.Threading.Timer(cb, null, 1000 * 60 * 15, 0);
-            }).Start();
-        }
-
-        private void btnLogin1_Click(object sender, EventArgs e)
-        {
-            new Thread(() =>
-            {
-                Thread.CurrentThread.IsBackground = true;
-                /* run your code here */
-                allUsers[5].getModManager().LoginToNeopets(allUsers[5].username, allUsers[5].password, "");
-            System.Threading.Thread.Sleep(1000);
-            }).Start();
-        }
-
-        private void btnTest_Click(object sender, EventArgs e)
-        {
-            new Thread(() =>
-            {
-                Thread.CurrentThread.IsBackground = true;
-                allUsers[5].getModManager().startTrudy(allUsers[5]);
-            }).Start();
-    }
     }
 }

@@ -76,7 +76,7 @@ namespace MyNeopetPal
         #endregion
 
 
-        public void LoginToNeopets(string username, string password, string proxy)
+        public void LoginToNeopets(string username, string password, string proxy, RichTextBox txtbox)
         {
 
             //Do a GET request, this also sets the Cookies in our cookiecontainer.
@@ -95,16 +95,16 @@ namespace MyNeopetPal
                 }
                 catch (Exception)
                 {
-                    form.AppendText("Failed", username);
+                    form.AppendText("Failed", username, txtbox);
                     throw;
                 }
 
             if (returnData.Contains("Welcome,"))
             {
-                form.AppendText("Logged in successful as " + username, username);
+                form.AppendText("Logged in successful as " + username, username, txtbox);
             }
             else
-                form.AppendText("Not logged in", username);
+                form.AppendText("Not logged in", username, txtbox);
             //Read the response and confirm you are logged in
             //Log it
         }
@@ -123,11 +123,11 @@ namespace MyNeopetPal
 
                 if (returnData.Contains("you are only allowed to purchase one item every 30 minutes"))
                 {
-                    form.AppendText("Sql wasnt up to date and already collected", user.username);
+                    form.AppendText("Sql wasnt up to date and already collected", user.username, user.txtbox);
                 }
                 else
                 {
-                    form.AppendText("Purchased snowball", user.username);
+                    form.AppendText("Purchased snowball", user.username, user.txtbox);
                 }
         }
         public void startKitchenQuest(Users user, SQLiteConnection connect)
@@ -143,7 +143,7 @@ namespace MyNeopetPal
                 }
                 catch (Exception)
                 {
-                    form.AppendText("Failed", user.username);
+                    form.AppendText("Failed", user.username, user.txtbox);
                     throw;
                 }
                 string searchFor = "Do you want to help me or not?";
@@ -161,7 +161,7 @@ namespace MyNeopetPal
                     int Pos1end = adjust.IndexOf("</B>");
                     if (Pos1end < 0)
                     {
-                        form.AppendText("10 quest limit reached", user.username);
+                        form.AppendText("10 quest limit reached", user.username, user.txtbox);
                         return;
                     }
                     itemOne = adjust.Substring(0, Pos1end);
@@ -203,7 +203,7 @@ namespace MyNeopetPal
                             adjust = adjust.Substring(itemFourPosEnd);
                         }
 
-                        form.AppendText("can't start kitchen quest, Is it already started?", user.username);
+                        form.AppendText("can't start kitchen quest, Is it already started?", user.username, user.txtbox);
                     }
 
                     if (itemOne != "")
@@ -216,7 +216,7 @@ namespace MyNeopetPal
                                 System.Threading.Thread.Sleep(250);
                                 if (buyFromShopWizard(user, itemOne) == 1)
                                 {
-                                    form.AppendText("Can;t find " + itemOne + " in the shop wizzard", user.username);
+                                    form.AppendText("Can;t find " + itemOne + " in the shop wizzard", user.username, user.txtbox);
                                     System.Threading.Thread.Sleep(250);
                                 }
                             }
@@ -235,7 +235,7 @@ namespace MyNeopetPal
                                 if (buyFromShopWizard(user, itemTwo) == 1)
                                 {
                                     System.Threading.Thread.Sleep(250);
-                                    form.AppendText("Can;t find " + itemTwo + " in the shop wizzard", user.username);
+                                    form.AppendText("Can;t find " + itemTwo + " in the shop wizzard", user.username, user.txtbox);
                                 }
                             }
                         }
@@ -253,7 +253,7 @@ namespace MyNeopetPal
                                 if (buyFromShopWizard(user, itemThree) == 1)
                                 {
                                     System.Threading.Thread.Sleep(250);
-                                    form.AppendText("Can;t find " + itemThree + " in the shop wizzard", user.username);
+                                    form.AppendText("Can;t find " + itemThree + " in the shop wizzard", user.username, user.txtbox);
                                 }
                             }
                         }
@@ -273,7 +273,7 @@ namespace MyNeopetPal
                                 if (buyFromShopWizard(user, itemFour) == 1)
                                 {
                                     System.Threading.Thread.Sleep(250);
-                                    form.AppendText("Can;t find " + itemFour + " in the shop wizzard", user.username);
+                                    form.AppendText("Can;t find " + itemFour + " in the shop wizzard", user.username, user.txtbox);
                                 }
                             }
                         }
@@ -302,7 +302,7 @@ namespace MyNeopetPal
                         }
                         catch (Exception)
                         {
-                            form.AppendText("Failed", user.username);
+                            form.AppendText("Failed", user.username, user.txtbox);
                             throw;
                         }
 
@@ -347,7 +347,7 @@ namespace MyNeopetPal
                                 if (buyFromShopWizard(user, itemOne) == 1)
                                     if (buyFromShopWizard(user, itemOne) == 1)
                                         if (buyFromShopWizard(user, itemOne) == 1)
-                                            form.AppendText("Can;t find " + itemOne + " in the shop wizzard", user.username);
+                                            form.AppendText("Can;t find " + itemOne + " in the shop wizzard", user.username, user.txtbox);
                                 System.Threading.Thread.Sleep(250);
                             }
 
@@ -356,28 +356,28 @@ namespace MyNeopetPal
                                 if (buyFromShopWizard(user, itemTwo) == 1)
                                     if (buyFromShopWizard(user, itemTwo) == 1)
                                         if (buyFromShopWizard(user, itemTwo) == 1)
-                                            form.AppendText("Can;t find " + itemTwo + " in the shop wizzard", user.username);
+                                            form.AppendText("Can;t find " + itemTwo + " in the shop wizzard", user.username, user.txtbox);
                             }
                             if (itemThree != "")
                             {
                                 if (buyFromShopWizard(user, itemThree) == 1)
                                     if (buyFromShopWizard(user, itemThree) == 1)
                                         if (buyFromShopWizard(user, itemThree) == 1)
-                                            form.AppendText("Can;t find " + itemThree + " in the shop wizzard", user.username);
+                                            form.AppendText("Can;t find " + itemThree + " in the shop wizzard", user.username, user.txtbox);
                             }
                             if (itemFour != "")
                             {
                                 if (buyFromShopWizard(user, itemFour) == 1)
                                     if (buyFromShopWizard(user, itemFour) == 1)
                                         if (buyFromShopWizard(user, itemFour) == 1)
-                                            form.AppendText("Can;t find " + itemFour + " in the shop wizzard", user.username);
+                                            form.AppendText("Can;t find " + itemFour + " in the shop wizzard", user.username, user.txtbox);
                             }
                             if (itemFive != "")
                             {
                                 if (buyFromShopWizard(user, itemFive) == 1)
                                     if (buyFromShopWizard(user, itemFive) == 1)
                                         if (buyFromShopWizard(user, itemFive) == 1)
-                                            form.AppendText("Can;t find " + itemFive + " in the shop wizzard", user.username);
+                                            form.AppendText("Can;t find " + itemFive + " in the shop wizzard", user.username, user.txtbox);
                             }
                         }
 
@@ -406,7 +406,7 @@ namespace MyNeopetPal
                 {
                     if (responsecookie == null)
                     {
-                        form.AppendText("Responsecookie was null", user.username);
+                        form.AppendText("Responsecookie was null", user.username, user.txtbox);
                         return 1;
                     }
                     using (StreamReader reader = new StreamReader(responsecookie.GetResponseStream()))
@@ -414,13 +414,13 @@ namespace MyNeopetPal
                 }
                 catch (Exception)
                 {
-                    form.AppendText("Failed", user.username);
+                    form.AppendText("Failed", user.username, user.txtbox);
                     throw;
                 }
                 //we have now search for the item we must parse the list of shops
                 if (returnData.Contains("I did not find anything."))
                 {
-                    form.AppendText("Can't find item will try again " + item, user.username);
+                    form.AppendText("Can't find item will try again " + item, user.username, user.txtbox);
                     return 1;
                 }
                 int ownerStartPos = returnData.IndexOf("owner=") + 6;
@@ -437,7 +437,7 @@ namespace MyNeopetPal
                 string adjustedPattern = returnData.Substring(objectEndPos);
                 int neopointCostEnd = adjustedPattern.IndexOf("\">");
                 string neopointcost = adjustedPattern.Substring(0 + 20, neopointCostEnd - 20);
-                form.AppendText("Buying " + item + " for " + neopointcost, user.username);
+                form.AppendText("Buying " + item + " for " + neopointcost, user.username, user.txtbox);
 
                 //now we have shop and ID we can make a get request to shop
                 HttpWebRequest request = generateRequest("GET", "http://www.neopets.com/browseshop.phtml?owner=" + shopuserName + "&buy_obj_info_id=" + objectId + "&buy_cost_neopoints=" + neopointcost + "&lower=0", user.proxy, "http://www.neopets.com/browseshop.phtml?owner=" + shopuserName + "&buy_obj_info_id=" + objectId + "&buy_cost_neopoints=" + neopointcost);
@@ -490,17 +490,17 @@ namespace MyNeopetPal
                     }
                     catch (Exception)
                     {
-                        form.AppendText("Failed", user.username);
+                        form.AppendText("Failed", user.username, user.txtbox);
                         throw;
                     }
 
                     if (returnData.Contains("Something went wrong!"))
                     {
-                        form.AppendText("Trudy return diff, maybe it was already complete?", user.username);
+                        form.AppendText("Trudy return diff, maybe it was already complete?", user.username, user.txtbox);
                     }
                     else
                     {
-                        form.AppendText("Trudy complete", user.username);
+                        form.AppendText("Trudy complete", user.username, user.txtbox);
                         //log to sqlite the time/date
                     }
 

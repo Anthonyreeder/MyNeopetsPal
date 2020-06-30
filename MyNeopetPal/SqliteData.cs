@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MyNeopetPal
 {
@@ -72,7 +73,7 @@ namespace MyNeopetPal
                             newcmd.Parameters.AddWithValue("@Id", user.id);
                             newcmd.Prepare();
                             newcmd.ExecuteNonQuery();
-                            form.AppendText("Snowball time updated", user.username);
+                            form.AppendText("Snowball time updated", user.username, user.txtbox);
                         }
 
                         //now return true to say we can collect
@@ -97,7 +98,7 @@ namespace MyNeopetPal
                 {
                     DateTime time = sqlite_datareader.GetDateTime(0);
                     DateTime MinsLater = time.AddMinutes(30);
-                    if (DateTime.Now.Date > time.Date)
+                    if (DateTime.Now.Date > time.Date && DateTime.Now.TimeOfDay > new TimeSpan(10, 0, 0))
                     {
                         using (SQLiteCommand newcmd = new SQLiteCommand(conn))
                         {
@@ -106,7 +107,7 @@ namespace MyNeopetPal
                             newcmd.Parameters.AddWithValue("@Id", user.id);
                             newcmd.Prepare();
                             newcmd.ExecuteNonQuery();
-                            form.AppendText("Trudy time updated", user.username);
+                            form.AppendText("Trudy time updated", user.username, user.txtbox);
                         }
                         return true;
                     }
@@ -120,20 +121,22 @@ namespace MyNeopetPal
         }
 
 
-        public static List<Users> ReadData(SQLiteConnection conn, Form1 form)
+        public static List<Users> ReadData(SQLiteConnection conn, Form1 form, List<RichTextBox> txtbox)
         {
             SQLiteDataReader sqlite_datareader;
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = conn.CreateCommand();
-            sqlite_cmd.CommandText = "SELECT * FROM Users";
+            sqlite_cmd.CommandText = "SELECT * FROM Users where Active = 1";
             sqlite_datareader = sqlite_cmd.ExecuteReader();
             List<Users> users = new List<Users>();
             while (sqlite_datareader.Read())
             {
                 ModManager modManager = new ModManager(form);
-                Users newUser = new Users(sqlite_datareader.GetInt32(0), modManager, sqlite_datareader.GetString(1), sqlite_datareader.GetString(2), sqlite_datareader.GetString(3), conn);
+
+                Users newUser = new Users(sqlite_datareader.GetInt32(0), modManager, sqlite_datareader.GetString(1), sqlite_datareader.GetString(2), sqlite_datareader.GetString(3), conn, txtbox[0]);
                 users.Add(newUser);
-                form.AppendText("Username: " + newUser.username, "DATA");
+                form.AppendText("Username: " + newUser.username, "DATA", txtbox[0]);
+                txtbox.RemoveAt(0);
             }
             return users;
         }

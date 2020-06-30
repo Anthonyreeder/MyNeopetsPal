@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace MyNeopetPal
 {
@@ -15,8 +16,9 @@ namespace MyNeopetPal
         public bool actionReady = false;
         public int action = 0;
         SQLiteConnection connect;
+        public RichTextBox txtbox;
 
-        public Users(int id, ModManager modManager, string username, string password, string proxy, SQLiteConnection connect)
+        public Users(int id, ModManager modManager, string username, string password, string proxy, SQLiteConnection connect, RichTextBox txtbox)
         {
             this.id = id;
             this.modManager = modManager;
@@ -24,6 +26,7 @@ namespace MyNeopetPal
             this.password = password;
             this.proxy = proxy;
             this.connect = connect;
+            this.txtbox = txtbox;
         }
 
         public List<int> actionQueue = new List<int>();
@@ -36,7 +39,7 @@ namespace MyNeopetPal
         {
             new Thread(() =>
             {
-                getModManager().LoginToNeopets(username, password, proxy); //this should be a bool to indicate if its logged in or not, if it fails it could then retry.
+                getModManager().LoginToNeopets(username, password, proxy, txtbox); //this should be a bool to indicate if its logged in or not, if it fails it could then retry.
                 //i need to also add a bool to say if currently logged in
                 Thread.CurrentThread.IsBackground = true;
                 System.Threading.TimerCallback cb = new System.Threading.TimerCallback(OnTimedEvent);
@@ -48,23 +51,23 @@ namespace MyNeopetPal
         {
             if (SqliteData.UpdateSnowball(connect, this, modManager.form))
             {
-                modManager.form.AppendText("Buying stick snowball", username);
+                modManager.form.AppendText("Buying stick snowball", username, txtbox);
                 getModManager().buyStickySnowball(this);
                 timer.Change(1000 * 60 * 1, 0);  //reset timer
                 return;
             }
             else
-                modManager.form.AppendText("Snowball purchased in last 30minutes", username);
+                modManager.form.AppendText("Snowball purchased in last 30minutes", username, txtbox);
 
             if (SqliteData.UpdateTrudy(connect, this, modManager.form))
             {
-                modManager.form.AppendText("Starting trudy", username);
+                modManager.form.AppendText("Starting trudy", username, txtbox);
                 getModManager().startTrudy(this);
                 timer.Change(1000 * 60 * 1, 0);  //reset timer
                 return;
             }
             else
-                modManager.form.AppendText("Trudy completed today", username);
+                modManager.form.AppendText("Trudy completed today", username, txtbox);
             //check using sql all the events and see what/if anything needs doing for this user.//
             //complete the action and then reset timer to another slightly random (1-2minutes)   
 
