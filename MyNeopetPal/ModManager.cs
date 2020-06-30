@@ -132,11 +132,6 @@ namespace MyNeopetPal
         }
         public void startKitchenQuest(Users user, SQLiteConnection connect)
         {
-            if (!SqliteData.UpdateTrudy(connect, user, form))
-            {
-                form.AppendText("Already completed trudy today", user.username);
-                return;
-            }
             string returnData = string.Empty;
             HttpWebRequest request = generateRequest("GET", "http://www.neopets.com/island/kitchen.phtml", user.proxy, "http://www.neopets.com/island/index.phtml");
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
@@ -345,6 +340,7 @@ namespace MyNeopetPal
                             int PosItemFiveEnd = adjusted.IndexOf("<");
                             string itemFive = adjusted.Substring(0, PosItemFiveEnd);
                             adjusted = adjusted.Substring(PosItemFiveEnd);
+                            //Proof of conept, obviously this won't make it into production.
 
                             if (itemOne != "")
                             {
