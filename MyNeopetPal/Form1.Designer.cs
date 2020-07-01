@@ -40,6 +40,8 @@
             this.logbox8 = new System.Windows.Forms.RichTextBox();
             this.logbox9 = new System.Windows.Forms.RichTextBox();
             this.logboxSystem = new System.Windows.Forms.RichTextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_login
@@ -134,17 +136,39 @@
             // 
             // logboxSystem
             // 
-            this.logboxSystem.Location = new System.Drawing.Point(398, 606);
+            this.logboxSystem.Location = new System.Drawing.Point(1556, 606);
             this.logboxSystem.Name = "logboxSystem";
-            this.logboxSystem.Size = new System.Drawing.Size(1538, 101);
+            this.logboxSystem.Size = new System.Drawing.Size(380, 101);
             this.logboxSystem.TabIndex = 16;
             this.logboxSystem.Text = "System:";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(784, 603);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(380, 106);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "test";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(1170, 606);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(380, 106);
+            this.button2.TabIndex = 18;
+            this.button2.Text = "test";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1960, 720);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.logboxSystem);
             this.Controls.Add(this.logbox9);
             this.Controls.Add(this.logbox8);
@@ -177,6 +201,8 @@
         public System.Windows.Forms.RichTextBox logbox8;
         public System.Windows.Forms.RichTextBox logbox9;
         public System.Windows.Forms.RichTextBox logboxSystem;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 

@@ -44,38 +44,45 @@ namespace MyNeopetPal
                 //i need to also add a bool to say if currently logged in
                 Thread.CurrentThread.IsBackground = true;
                 System.Threading.TimerCallback cb = new System.Threading.TimerCallback(OnTimedEvent);
-                timer = new System.Threading.Timer(cb, null, 1000 * 60 * rnd.Next(1, 12), 0); //tme will be slightly randomised so all users are split up a bit
+                timer = new System.Threading.Timer(cb, null, 1000 * 60 * rnd.Next(1, 5), 0); //tme will be slightly randomised so all users are split up a bit
             }).Start();
         }
         
         void OnTimedEvent(object obj)
         {
+
             if (SqliteData.UpdateSnowball(connect, this, modManager.form))
             {
                 modManager.form.AppendText("Buying stick snowball", username, txtbox);
                 getModManager().buyStickySnowball(this);
-                timer.Change(1000 * 60 * rnd.Next(1, 12), 0);  //reset timer
+                timer.Change(1000 * 60 * rnd.Next(1, 20), 0);  //reset timer
                 return;
             }
             else
                 modManager.form.AppendText("Snowball purchased in last 30minutes", username, txtbox);
-
-            if (SqliteData.UpdateTrudy(connect, this, modManager.form))
+                if (SqliteData.UpdateTrudy(connect, this, modManager.form))
             {
                 modManager.form.AppendText("Starting trudy", username, txtbox);
                 getModManager().startTrudy(this);
-                timer.Change(1000 * 60 * rnd.Next(1, 12), 0);  //reset timer
+                timer.Change(1000 * 60 * rnd.Next(1, 20), 0);  //reset timer
                 return;
             }
             else
                 modManager.form.AppendText("Trudy completed today", username, txtbox);
+            
+                if (SqliteData.UpdateScratchcard(connect, this, modManager.form))
+            {
+                modManager.form.AppendText("Starting scratchcard", username, txtbox);
+                getModManager().buyScratchCard(this);
+                timer.Change(1000 * 60 * rnd.Next(1, 20), 0);  //reset timer
+                return;
+            }
+            else
+                modManager.form.AppendText("ScratchCard completed in last 4 hours", username, txtbox);
             //check using sql all the events and see what/if anything needs doing for this user.//
             //complete the action and then reset timer to another slightly random (1-2minutes)   
-
-
             //Nothing ready to do so just wait a bit longer and go again.
-
-            timer.Change(1000 * 60 * rnd.Next(1, 12), 0);  //reset timer
+            timer.Change(1000 * 60 * rnd.Next(1, 20), 0);  //reset timer
         }
     }
 }

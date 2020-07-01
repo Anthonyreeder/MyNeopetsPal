@@ -129,6 +129,61 @@ namespace MyNeopetPal
                     form.AppendText("Purchased snowball", user.username, user.txtbox);
                 }
         }
+        public void buyScratchCard(Users user)
+        {
+            string returnData = string.Empty;
+            HttpWebRequest request = generateRequest("GET", "http://www.neopets.com/desert/sc/kiosk.phtml", user.proxy, "http://www.neopets.com/index.phtml");
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                try
+                {
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        returnData = reader.ReadToEnd();
+                }
+                catch (Exception)
+                {
+                    form.AppendText("Failed", user.username, user.txtbox);
+                    throw;
+                }
+
+
+                string searchfor = "ref_ck' ";
+                string adjusted = "";
+
+                int PosItemOneStart = returnData.IndexOf(searchfor) + 15;
+                adjusted = returnData.Substring(PosItemOneStart);
+                int PosItemOneEnd = adjusted.IndexOf("'>");
+                string value = adjusted.Substring(0, PosItemOneEnd);
+                HttpWebRequest requestPost = generateRequest("POST", "http://www.neopets.com/desert/sc/kiosk.phtml", user.proxy, "http://www.neopets.com/index.phtml");
+                //buy=1&_ref_ck=8d205f1699390b15091b7a024313b76e
+                String[] keys = { "buy", "&_ref_ck" };
+                String[] values = { "1", value };
+                string returnData2 = string.Empty;
+                using (HttpWebResponse response2 = writeData(requestPost, keys, values))
+                {
+                    try
+                    {
+                        using (StreamReader reader = new StreamReader(response2.GetResponseStream()))
+                            returnData = reader.ReadToEnd();
+                    }
+                    catch (Exception)
+                    {
+                        form.AppendText("Failed", user.username, user.txtbox);
+                        throw;
+                    }
+
+                    if (returnData.Contains("Thanks for buying a scratchcard!"))
+                    {
+                        form.AppendText("Bought scratchcard", user.username, user.txtbox);
+                    }
+                    else
+                    {
+                        form.AppendText("Failed to buy, did you already buy one?", user.username, user.txtbox);
+                    }
+                }
+
+            }
+        }
         public void startKitchenQuest(Users user, SQLiteConnection connect)
         {
             string returnData = string.Empty;
@@ -389,8 +444,7 @@ namespace MyNeopetPal
                     }
                 }
             }
-        }
-        
+        }   
         public int buyFromShopWizard(Users user, string item)
         {
             string returnData = string.Empty;

@@ -110,5 +110,18 @@ namespace MyNeopetPal
             //have a form control to select which user
             //using their ID/Name/Username whatever... find the correct one in list (for testing ill just use 0 as theres only 1 user)            
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Users usertemp = allUsers[2];
+            usertemp.getModManager().LoginToNeopets(usertemp.username, usertemp.password, usertemp.proxy, logbox1);
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Users usertemp = allUsers[2];
+            usertemp.getModManager().buyScratchCard(usertemp);
+        }
     }
 }

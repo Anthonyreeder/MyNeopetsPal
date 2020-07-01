@@ -119,6 +119,40 @@ namespace MyNeopetPal
                 return false;
             }
         }
+        public static bool UpdateScratchcard(SQLiteConnection conn, Users user, Form1 form)
+        {
+            using (SQLiteCommand cmd = new SQLiteCommand(conn))
+            {
+                SQLiteDataReader sqlite_datareader;
+                cmd.CommandText = "select Scratchcard from Daily where Id = @id";
+                cmd.Parameters.AddWithValue("@Id", user.id);
+                cmd.Prepare();
+                sqlite_datareader = cmd.ExecuteReader();
+                while (sqlite_datareader.Read())
+                {
+                    DateTime time = sqlite_datareader.GetDateTime(0);
+                    DateTime MinsLater = time.AddHours(4);
+                    if (DateTime.Now > MinsLater)
+                    {
+                        using (SQLiteCommand newcmd = new SQLiteCommand(conn))
+                        {
+                            //Date now is greater than recorded time so we will update and grab
+                            newcmd.CommandText = "UPDATE Daily SET Scratchcard = datetime('now', 'localtime') where Id = @id";
+                            newcmd.Parameters.AddWithValue("@Id", user.id);
+                            newcmd.Prepare();
+                            newcmd.ExecuteNonQuery();
+                            form.AppendText("Scratchcard time updated", user.username, user.txtbox);
+                        }
+                        return true;
+                    }
+                    else
+                        //Date is not greater so its probably the same day so return false
+                        return false;
+                }
+                //ASomething happened, i dunno what but just do false cus it aint done shit.
+                return false;
+            }
+        }
 
 
         public static List<Users> ReadData(SQLiteConnection conn, Form1 form, List<RichTextBox> txtbox)
