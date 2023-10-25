@@ -1,13 +1,3 @@
-I started making a neopets bot in my spare time and i've also decided to make it open-source for anyone that wants to fork it or just read in general or join in the fun!
-
-My neopets pal:
-Written in C# - Anthony reeder
-https://github.com/A...er/MyNeopetsPal
-
-Intro:
-
-This isn't necessarily the best code and I've cut alot of corners but it's fairly clean and so far proven to be fairly robust. There is alot of reusable code that i plan on tidying up later. At this point I really just wanted to get something functional and profitable (as i'm poor in neopets).
-
 Current functionality as of 01/07/2020:
 - Runs multiple accounts simultaneity using different proxies
 - Buying snowballs every 30minutes
